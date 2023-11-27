@@ -17,7 +17,6 @@ const feedUrls = [
     "https://animenewsandfacts.com/feed/",
     "https://honeysanime.com/feed/"
 ];
-
 async function fetchNews() {
     const newsContainer = document.getElementById("news-container");
 
@@ -46,12 +45,27 @@ async function fetchNews() {
         const description = document.createElement("p");
         description.textContent = item.description;
 
+        const mediaContainer = document.createElement("div");
+
+        // Handle images and videos
+        if (item.enclosure && item.enclosure.type.startsWith("image")) {
+            const image = document.createElement("img");
+            image.src = item.enclosure.link;
+            mediaContainer.appendChild(image);
+        } else if (item.enclosure && item.enclosure.type.startsWith("video")) {
+            const video = document.createElement("video");
+            video.src = item.enclosure.link;
+            video.controls = true;
+            mediaContainer.appendChild(video);
+        }
+
         const link = document.createElement("a");
         link.href = item.link;
         link.textContent = "Read more";
 
         newsItem.appendChild(title);
         newsItem.appendChild(description);
+        newsItem.appendChild(mediaContainer);
         newsItem.appendChild(link);
         newsContainer.appendChild(newsItem);
     });
