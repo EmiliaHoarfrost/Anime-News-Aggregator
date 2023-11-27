@@ -5,7 +5,8 @@ const feedUrls = [
     "https://medium.com/@emiliahoarfrost/feed",
     "https://artistunknown.info/feed/",
     "https://animetudes.com/feed/",
-    "https://keyframe.blog/feed/"
+    "https://keyframe.blog/feed/",
+    "https://www.animefeminist.com/feed/"
 ];
 
 async function fetchNews() {
