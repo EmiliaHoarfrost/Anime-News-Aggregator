@@ -70,8 +70,8 @@ function createNewsItem(item) {
 function createMediaContainer(item) {
     const mediaContainer = document.createElement("div");
 
-    // Handle images and videos
-    if (item.enclosure) {
+    if (item.enclosure && item.enclosure.type) {
+        // Handle images and videos
         if (item.enclosure.type.startsWith("image")) {
             const image = document.createElement("img");
             image.src = item.enclosure.link;
@@ -89,3 +89,4 @@ function createMediaContainer(item) {
 }
 
 fetchNews();
+
