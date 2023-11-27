@@ -36,39 +36,56 @@ async function fetchNews() {
     allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
     allNews.forEach(item => {
-        const newsItem = document.createElement("div");
-        newsItem.classList.add("news-item");
+        const newsItem = createNewsItem(item);
+        newsContainer.appendChild(newsItem);
+    });
+}
 
-        const title = document.createElement("h2");
-        title.textContent = item.title;
+function createNewsItem(item) {
+    const newsItem = document.createElement("div");
+    newsItem.classList.add("news-item");
 
-        const description = document.createElement("p");
-        description.textContent = item.description;
+    const title = document.createElement("h2");
+    title.textContent = item.title;
 
-        const mediaContainer = document.createElement("div");
+    const description = document.createElement("p");
+    description.textContent = item.description;
 
-        // Handle images and videos
-        if (item.enclosure && item.enclosure.type.startsWith("image")) {
+    const mediaContainer = createMediaContainer(item);
+
+    const link = document.createElement("a");
+    link.href = item.link;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Read more";
+
+    newsItem.appendChild(title);
+    newsItem.appendChild(description);
+    newsItem.appendChild(mediaContainer);
+    newsItem.appendChild(link);
+
+    return newsItem;
+}
+
+function createMediaContainer(item) {
+    const mediaContainer = document.createElement("div");
+
+    // Handle images and videos
+    if (item.enclosure) {
+        if (item.enclosure.type.startsWith("image")) {
             const image = document.createElement("img");
             image.src = item.enclosure.link;
+            image.alt = "News Image";
             mediaContainer.appendChild(image);
-        } else if (item.enclosure && item.enclosure.type.startsWith("video")) {
+        } else if (item.enclosure.type.startsWith("video")) {
             const video = document.createElement("video");
             video.src = item.enclosure.link;
             video.controls = true;
             mediaContainer.appendChild(video);
         }
+    }
 
-        const link = document.createElement("a");
-        link.href = item.link;
-        link.textContent = "Read more";
-
-        newsItem.appendChild(title);
-        newsItem.appendChild(description);
-        newsItem.appendChild(mediaContainer);
-        newsItem.appendChild(link);
-        newsContainer.appendChild(newsItem);
-    });
+    return mediaContainer;
 }
 
 fetchNews();
