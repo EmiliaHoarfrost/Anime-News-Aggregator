@@ -6,7 +6,8 @@ const feedUrls = [
     "https://artistunknown.info/feed/",
     "https://animetudes.com/feed/",
     "https://keyframe.blog/feed/",
-    "https://www.animefeminist.com/feed/"
+    "https://www.animefeminist.com/feed/,
+    "https://yuriempire.wordpress.com/feed/""
 ];
 
 async function fetchNews() {
