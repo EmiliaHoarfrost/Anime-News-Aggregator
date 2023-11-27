@@ -23,14 +23,7 @@ async function fetchNews() {
                 title.textContent = item.title;
 
                 const description = document.createElement("p");
-                description.innerHTML = item.description;
-
-                const image = document.createElement("img");
-                // Assuming the image is in the 'enclosure' property
-                if (item.enclosure && item.enclosure.link) {
-                    image.src = item.enclosure.link;
-                    image.alt = item.title; // You can set alternative text for the image
-                }
+                description.textContent = item.description;
 
                 const link = document.createElement("a");
                 link.href = item.link;
@@ -38,7 +31,6 @@ async function fetchNews() {
 
                 newsItem.appendChild(title);
                 newsItem.appendChild(description);
-                newsItem.appendChild(image);
                 newsItem.appendChild(link);
                 newsContainer.appendChild(newsItem);
             });
