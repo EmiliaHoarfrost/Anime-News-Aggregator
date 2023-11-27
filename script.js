@@ -10,11 +10,11 @@ const feedUrls = [
     "https://wavemotioncannon.com/feed/",
     "https://feeds.feedburner.com/catsuka-news",
     "https://wrongeverytime.com/feed/",
-    "https://www.animeherald.com/feed/,
+    "https://www.animeherald.com/feed/",
     "https://www.cartoonbrew.com/location/japan/feed",
     "https://myanimelist.net/rss/news.xml",
     "https://anitrendz.net/news/feed/",
-    "https://animenewsandfacts.com/feed/,"
+    "https://animenewsandfacts.com/feed/",
     "https://honeysanime.com/feed/"
 ];
 
