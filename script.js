@@ -2,7 +2,7 @@ const feedUrls = [
     "https://fullfrontal.moe/feed/",
     "https://blog.sakugabooru.com/feed/",
     "https://www.animenewsnetwork.com/all/rss.xml?ann-edition=w",
-    <! –– "https://medium.com/@emiliahoarfrost/feed",––>
+    "https://medium.com/@emiliahoarfrost/feed",
     "https://artistunknown.info/feed/",
     "https://animetudes.com/feed/"
 ];
