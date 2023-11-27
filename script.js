@@ -6,7 +6,12 @@ const feedUrls = [
     "https://animetudes.com/feed/",
     "https://keyframe.blog/feed/",
     "https://www.animefeminist.com/feed/",
-    "https://yuriempire.wordpress.com/feed/"
+    "https://yuriempire.wordpress.com/feed/",
+    "https://wavemotioncannon.com/feed/",
+    "https://feeds.feedburner.com/catsuka-news",
+    "https://wrongeverytime.com/feed/",
+    "https://www.animeherald.com/feed/,
+    "https://www.cartoonbrew.com/location/japan/feed"
 ];
 
 async function fetchNews() {
