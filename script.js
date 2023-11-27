@@ -22,15 +22,11 @@ async function fetchNews() {
                 const title = document.createElement("h2");
                 title.textContent = item.title;
 
-                const description = document.createElement("p");
-                description.textContent = item.description;
-
                 const link = document.createElement("a");
                 link.href = item.link;
                 link.textContent = "Read more";
 
                 newsItem.appendChild(title);
-                newsItem.appendChild(description);
                 newsItem.appendChild(link);
                 newsContainer.appendChild(newsItem);
             });
