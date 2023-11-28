@@ -17,58 +17,71 @@ const feedUrls = [
     "https://animenewsandfacts.com/feed/",
     "https://honeysanime.com/feed/"
 ];
+
 async function fetchNews() {
     const newsContainer = document.getElementById("news-container");
 
-    let allNews = [];
+    try {
+        let allNews = [];
 
-    for (const url of feedUrls) {
-        try {
+        // Fetch news from each feed URL
+        for (const url of feedUrls) {
             const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
             const data = await response.json();
-            allNews = allNews.concat(data.items);
-        } catch (error) {
-            console.error(`Error fetching news from ${url}:`, error);
+
+            if (data.items && Array.isArray(data.items)) {
+                allNews = allNews.concat(data.items);
+            }
         }
+
+        // Sort news by date of publication
+        allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+        // Display news on the webpage
+        allNews.forEach(item => displayNewsItem(item, newsContainer));
+    } catch (error) {
+        console.error("Error fetching or displaying news:", error);
     }
+}
 
-    // Sort news by date of publication (assuming the date is available in the "pubDate" property)
-    allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+function displayNewsItem(item, container) {
+    const newsItem = document.createElement("div");
+    newsItem.classList.add("news-item");
 
-    allNews.forEach(item => {
-        const newsItem = document.createElement("div");
-        newsItem.classList.add("news-item");
+    const title = document.createElement("h2");
+    title.textContent = item.title;
 
-        const title = document.createElement("h2");
-        title.textContent = item.title;
+    const description = document.createElement("p");
+    description.textContent = item.description;
 
-        const description = document.createElement("p");
-        description.textContent = item.description;
+    const mediaContainer = document.createElement("div");
 
-        const mediaContainer = document.createElement("div");
-
+    // Check if enclosure is defined and has a type property
+    if (item.enclosure && item.enclosure.type) {
         // Handle images and videos
-        if (item.enclosure && item.enclosure.type.startsWith("image")) {
+        if (item.enclosure.type.startsWith("image")) {
             const image = document.createElement("img");
             image.src = item.enclosure.link;
             mediaContainer.appendChild(image);
-        } else if (item.enclosure && item.enclosure.type.startsWith("video")) {
+        } else if (item.enclosure.type.startsWith("video")) {
             const video = document.createElement("video");
             video.src = item.enclosure.link;
             video.controls = true;
             mediaContainer.appendChild(video);
         }
+    }
 
-        const link = document.createElement("a");
-        link.href = item.link;
-        link.textContent = "Read more";
+    const link = document.createElement("a");
+    link.href = item.link;
+    link.textContent = "Read more";
 
-        newsItem.appendChild(title);
-        newsItem.appendChild(description);
-        newsItem.appendChild(mediaContainer);
-        newsItem.appendChild(link);
-        newsContainer.appendChild(newsItem);
-    });
+    newsItem.appendChild(title);
+    newsItem.appendChild(description);
+    newsItem.appendChild(mediaContainer);
+    newsItem.appendChild(link);
+
+    container.appendChild(newsItem);
 }
 
+// Call the fetchNews function
 fetchNews();
