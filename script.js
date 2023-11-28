@@ -57,7 +57,7 @@ function displayNewsItem(item, container) {
     const mediaContainer = document.createElement("div");
 
     // Check if enclosure is defined and has a type property
-    if (item.enclosure && item.enclosure.type) {
+    if (item.enclosure && item.enclosure.type && typeof item.enclosure.type === 'string') {
         // Handle images and videos
         if (item.enclosure.type.startsWith("image")) {
             const image = document.createElement("img");
