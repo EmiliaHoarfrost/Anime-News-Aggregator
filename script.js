@@ -1,87 +1,104 @@
-const feedUrls = [
-    "https://fullfrontal.moe/feed/",
-    "https://blog.sakugabooru.com/feed/",
-    "https://www.animenewsnetwork.com/all/rss.xml?ann-edition=w",
-    "https://artistunknown.info/feed/",
-    "https://animetudes.com/feed/",
-    "https://keyframe.blog/feed/",
-    "https://www.animefeminist.com/feed/",
-    "https://yuriempire.wordpress.com/feed/",
-    "https://wavemotioncannon.com/feed/",
-    "https://feeds.feedburner.com/catsuka-news",
-    "https://wrongeverytime.com/feed/",
-    "https://www.animeherald.com/feed/",
-    "https://www.cartoonbrew.com/location/japan/feed",
-    "https://myanimelist.net/rss/news.xml",
-    "https://anitrendz.net/news/feed/",
-    "https://animenewsandfacts.com/feed/",
-    "https://honeysanime.com/feed/"
-];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Aggregator</title>
+    <!-- Include the cheerio library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="news-container"></div>
 
-async function fetchNews() {
-    const newsContainer = document.getElementById("news-container");
+    <script>
+        const feedUrls = [
+            "https://fullfrontal.moe/feed/",
+            "https://blog.sakugabooru.com/feed/",
+            "https://www.animenewsnetwork.com/all/rss.xml?ann-edition=w",
+            "https://artistunknown.info/feed/",
+            "https://animetudes.com/feed/",
+            "https://keyframe.blog/feed/",
+            "https://www.animefeminist.com/feed/",
+            "https://yuriempire.wordpress.com/feed/",
+            "https://wavemotioncannon.com/feed/",
+            "https://feeds.feedburner.com/catsuka-news",
+            "https://wrongeverytime.com/feed/",
+            "https://www.animeherald.com/feed/",
+            "https://www.cartoonbrew.com/location/japan/feed",
+            "https://myanimelist.net/rss/news.xml",
+            "https://anitrendz.net/news/feed/",
+            "https://animenewsandfacts.com/feed/",
+            "https://honeysanime.com/feed/"
+            // Add any additional URLs here
+        ];
 
-    try {
-        let allNews = [];
+        async function fetchNews() {
+            const newsContainer = document.getElementById("news-container");
 
-        // Fetch news from each feed URL
-        for (const url of feedUrls) {
-            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-            const data = await response.json();
+            try {
+                let allNews = [];
 
-            if (data.items && Array.isArray(data.items)) {
-                allNews = allNews.concat(data.items);
+                // Fetch news from each feed URL
+                for (const url of feedUrls) {
+                    const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+                    const data = await response.json();
+
+                    if (data.status === 'ok' && data.items && Array.isArray(data.items)) {
+                        allNews = allNews.concat(data.items);
+                    }
+                }
+
+                // Sort news by date of publication
+                allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+                // Display news on the webpage
+                allNews.forEach(item => displayNewsItem(item, newsContainer));
+            } catch (error) {
+                console.error("Error fetching or displaying news:", error);
             }
         }
 
-        // Sort news by date of publication
-        allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        function displayNewsItem(item, container) {
+            const newsItem = document.createElement("div");
+            newsItem.classList.add("news-item");
 
-        // Display news on the webpage
-        allNews.forEach(item => displayNewsItem(item, newsContainer));
-    } catch (error) {
-        console.error("Error fetching or displaying news:", error);
-    }
-}
+            const title = document.createElement("h2");
+            title.textContent = item.title;
 
-function displayNewsItem(item, container) {
-    const newsItem = document.createElement("div");
-    newsItem.classList.add("news-item");
+            const description = document.createElement("p");
+            description.textContent = item.description;
 
-    const title = document.createElement("h2");
-    title.textContent = item.title;
+            const mediaContainer = document.createElement("div");
 
-    const description = document.createElement("p");
-    description.textContent = item.description;
+            // Check if enclosure is defined and has a type property
+            if (item.enclosure && item.enclosure.type && typeof item.enclosure.type === 'string') {
+                // Handle images and videos
+                if (item.enclosure.type.startsWith("image")) {
+                    const image = document.createElement("img");
+                    image.src = item.enclosure.link;
+                    mediaContainer.appendChild(image);
+                } else if (item.enclosure.type.startsWith("video")) {
+                    const video = document.createElement("video");
+                    video.src = item.enclosure.link;
+                    video.controls = true;
+                    mediaContainer.appendChild(video);
+                }
+            }
 
-    const mediaContainer = document.createElement("div");
+            const link = document.createElement("a");
+            link.href = item.link;
+            link.textContent = "Read more";
 
-    // Check if enclosure is defined and has a type property
-    if (item.enclosure && item.enclosure.type && typeof item.enclosure.type === 'string') {
-        // Handle images and videos
-        if (item.enclosure.type.startsWith("image")) {
-            const image = document.createElement("img");
-            image.src = item.enclosure.link;
-            mediaContainer.appendChild(image);
-        } else if (item.enclosure.type.startsWith("video")) {
-            const video = document.createElement("video");
-            video.src = item.enclosure.link;
-            video.controls = true;
-            mediaContainer.appendChild(video);
+            newsItem.appendChild(title);
+            newsItem.appendChild(description);
+            newsItem.appendChild(mediaContainer);
+            newsItem.appendChild(link);
+
+            container.appendChild(newsItem);
         }
-    }
 
-    const link = document.createElement("a");
-    link.href = item.link;
-    link.textContent = "Read more";
-
-    newsItem.appendChild(title);
-    newsItem.appendChild(description);
-    newsItem.appendChild(mediaContainer);
-    newsItem.appendChild(link);
-
-    container.appendChild(newsItem);
-}
-
-// Call the fetchNews function
-fetchNews();
+        // Call the fetchNews function
+        fetchNews();
+    </script>
+</body>
+</html>
