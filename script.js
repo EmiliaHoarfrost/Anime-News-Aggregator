@@ -108,6 +108,9 @@ function displayNewsItem(item, container) {
     const description = document.createElement("p");
     description.textContent = item.description;
 
+    const pubDate = document.createElement("p");
+    pubDate.textContent = `Published on: ${new Date(item.pubDate).toDateString()}`;
+
     const mediaContainer = document.createElement("div");
 
     // Check if enclosure is defined and has a type property
@@ -131,6 +134,7 @@ function displayNewsItem(item, container) {
 
     newsItem.appendChild(title);
     newsItem.appendChild(description);
+    newsItem.appendChild(pubDate);
     newsItem.appendChild(mediaContainer);
     newsItem.appendChild(link);
 
