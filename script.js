@@ -12,23 +12,74 @@
 
     <script>
         const feedUrls = [
-            "https://fullfrontal.moe/feed/",
-            "https://blog.sakugabooru.com/feed/",
-            "https://www.animenewsnetwork.com/all/rss.xml?ann-edition=w",
-            "https://artistunknown.info/feed/",
-            "https://animetudes.com/feed/",
-            "https://keyframe.blog/feed/",
-            "https://www.animefeminist.com/feed/",
-            "https://yuriempire.wordpress.com/feed/",
-            "https://wavemotioncannon.com/feed/",
-            "https://feeds.feedburner.com/catsuka-news",
-            "https://wrongeverytime.com/feed/",
-            "https://www.animeherald.com/feed/",
-            "https://www.cartoonbrew.com/location/japan/feed",
-            "https://myanimelist.net/rss/news.xml",
-            "https://anitrendz.net/news/feed/",
-            "https://animenewsandfacts.com/feed/",
-            "https://honeysanime.com/feed/"
+            {
+                url: "https://fullfrontal.moe/feed/",
+                source: "Full Frontal"
+            },
+            {
+                url: "https://blog.sakugabooru.com/feed/",
+                source: "Sakugabooru"
+            },
+            {
+                url: "https://www.animenewsnetwork.com/all/rss.xml?ann-edition=w",
+                source: "Anime News Network"
+            },
+            {
+                url: "https://artistunknown.info/feed/",
+                source: "Artist Unknown"
+            },
+            {
+                url: "https://animetudes.com/feed/",
+                source: "Animetudes"
+            },
+            {
+                url: "https://keyframe.blog/feed/",
+                source: "Keyframe"
+            },
+            {
+                url: "https://www.animefeminist.com/feed/",
+                source: "Anime Feminist"
+            },
+            {
+                url: "https://yuriempire.wordpress.com/feed/",
+                source: "Yuri Empire"
+            },
+            {
+                url: "https://wavemotioncannon.com/feed/",
+                source: "Wave Motion Cannon"
+            },
+            {
+                url: "https://feeds.feedburner.com/catsuka-news",
+                source: "Catsuka News"
+            },
+            {
+                url: "https://wrongeverytime.com/feed/",
+                source: "Wrong Every Time"
+            },
+            {
+                url: "https://www.animeherald.com/feed/",
+                source: "Anime Herald"
+            },
+            {
+                url: "https://www.cartoonbrew.com/location/japan/feed",
+                source: "Cartoon Brew"
+            },
+            {
+                url: "https://myanimelist.net/rss/news.xml",
+                source: "MyAnimeList"
+            },
+            {
+                url: "https://anitrendz.net/news/feed/",
+                source: "AniTrendz"
+            },
+            {
+                url: "https://animenewsandfacts.com/feed/",
+                source: "Anime News and Facts"
+            },
+            {
+                url: "https://honeysanime.com/feed/",
+                source: "Honey's Anime"
+            }
             // Add any additional URLs here
         ];
 
@@ -39,12 +90,12 @@
                 let allNews = [];
 
                 // Fetch news from each feed URL
-                for (const url of feedUrls) {
+                for (const { url, source } of feedUrls) {
                     const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
                     const data = await response.json();
 
                     if (data.status === 'ok' && data.items && Array.isArray(data.items)) {
-                        allNews = allNews.concat(data.items);
+                        allNews = allNews.concat(data.items.map(item => ({ ...item, source })));
                     }
                 }
 
@@ -87,7 +138,7 @@
 
             const link = document.createElement("a");
             link.href = item.link;
-            link.textContent = "Read more";
+            link.textContent = `Read more on ${item.source}`;
 
             newsItem.appendChild(title);
             newsItem.appendChild(description);
