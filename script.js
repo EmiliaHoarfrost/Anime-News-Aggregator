@@ -68,6 +68,10 @@ const feedUrls = [
     {
         url: "https://honeysanime.com/feed/",
         source: "Honey's Anime"
+    },
+{
+        url: "https://yuritimes.com/post/category/news/feed",
+        source: "Yuri Times"
     }
     // Add any additional URLs here
 ];
